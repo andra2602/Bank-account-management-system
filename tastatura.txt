@@ -14,7 +14,6 @@ depunere
 5
 6
 
-
 2
 Cirstea
 A2b9C4d7E1f8G3h6I5j2K9l4M7n1O8p3
@@ -25,13 +24,19 @@ retragere
 3
 6
 
-
 2
 Alexandrescu
 123456789123456789abcdfs
 ale12xa
 6
 
+2
+Dobrinoiu
+K6RAvQwfDsjUvNZASc88u3zF
+Dobrinoiu1234
+5
+3
+6
 
 1
 Tunaru
