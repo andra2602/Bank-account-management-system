@@ -183,17 +183,15 @@ int main() {
                                         std::cin >> numarContDestinatar;
 
                                         // Caută contul destinatar în listaConturi
-                                        bool found = false;
-                                        ContBancar *destinatar;
+                                        ContBancar *destinatar = nullptr;
                                         for (auto &cont: listaConturi) {
                                             if (cont.getnumarCont() == numarContDestinatar &&
                                                 cont.getTitularCont() == numeClientDestinatar) {
                                                 destinatar = &cont;
-                                                found = true;
-
+                                                break;
                                             }
                                         }
-                                        if (!found) {
+                                        if (destinatar == nullptr) {
                                             std::cout
                                                     << "Contul destinatar nu a fost gasit. Transferul nu poate fi efectuat."
                                                     << std::endl;
