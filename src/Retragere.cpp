@@ -1,4 +1,5 @@
 #include "Retragere.h"
+#include "Exceptii.h"
 
 Retragere::Retragere(float suma) : Tranzactie("retragere", suma) {}
 

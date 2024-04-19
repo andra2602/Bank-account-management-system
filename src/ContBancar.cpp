@@ -72,10 +72,10 @@ ContBancar operator-(const ContBancar &cb, float suma) {
 }
 
 void ContBancar::retrage_suma(float suma) {
-    if (suma <= sold_cont && (sold_cont - suma) >= 5000) {
+    if (suma <= sold_cont && suma <= 2000) {
         sold_cont -= suma;
     } else {
-        std::cout << "Retragerea depaseste limita minima de 5000. Procesul nu poate fi realizat." << std::endl;
+        std::cout << "Procesul nu poate fi realizat." << std::endl;
     }
 }
 

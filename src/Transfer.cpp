@@ -1,4 +1,5 @@
 #include "Transfer.h"
+#include "Exceptii.h"
 
 Transfer::Transfer(float suma, ContBancar* contBancar2) : Tranzactie("transfer", suma), contBancar2(contBancar2) {}
 
@@ -57,6 +58,9 @@ void Transfer::afisareDetalii() const {
 
 std::string Transfer::obtineTipTranzactie() const {
     return "Transfer";
+}
+ContBancar* Transfer::getContBancar2() const {
+    return contBancar2;
 }
 //
 // Created by Andra on 4/19/2024.

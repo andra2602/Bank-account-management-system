@@ -22,6 +22,7 @@ public:
     void read(std::istream &in) override;
     void afisareDetalii() const override;
     [[nodiscard]] std::string obtineTipTranzactie() const override;
+    ContBancar* getContBancar2() const;
 
     ~Transfer() override = default;
 };
