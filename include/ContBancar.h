@@ -34,15 +34,10 @@ public:
 
     void setSold(float suma);
 
-    [[maybe_unused]] void setNumeClient(const std::string &nume);
-
-    [[maybe_unused]] void setNumarClient(const std::string &numar);
     friend ContBancar operator+(const ContBancar &cb, float suma);
     void depune_suma(float suma);
     friend ContBancar operator-(const ContBancar &cb, float suma);
     void retrage_suma(float suma);
-
-    [[maybe_unused]] bool esteValid();
     ~ContBancar();
 };
 #endif //OOP_CONTBANCAR_H

@@ -55,10 +55,6 @@ std::string ContBancar::getparola() const { return parola; }
 
 void ContBancar::setSold(float suma) { sold_cont = suma; }
 
-[[maybe_unused]] void ContBancar::setNumeClient(const std::string &nume) { TitularCont = nume; }
-
-[[maybe_unused]] void ContBancar::setNumarClient(const std::string &numar) { numarCont = numar; }
-
 ContBancar operator+(const ContBancar &cb, float suma) {
     ContBancar temp(cb);
     temp.depune_suma(suma);
@@ -82,8 +78,6 @@ void ContBancar::retrage_suma(float suma) {
         std::cout << "Retragerea depaseste limita minima de 5000. Procesul nu poate fi realizat." << std::endl;
     }
 }
-
-[[maybe_unused]] bool ContBancar::esteValid() { return numarCont.length() == 24; }
 
 ContBancar::~ContBancar() = default;
 //
