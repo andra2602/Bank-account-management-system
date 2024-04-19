@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "ContBancar.h"
-#include "Tranzactie.h."
+#include "Tranzactie.h"
 #include "Depunere.h"
 #include "Exceptii.h"
 #include "Retragere.h"
@@ -56,8 +56,8 @@ void readAndDisplayObjects(int n,std::vector<ContBancar> &listaConturi) {
     }
 
     std::cout << "Conturi introduse:" << std::endl;
-    int startIndex = std::max(0, static_cast<int>(listaConturi.size()) - n);
-    for (int index=startIndex; index < listaConturi.size(); index++) {
+    std::vector<ContBancar>::size_type startIndex = std::max(static_cast<std::vector<ContBancar>::size_type>(0), listaConturi.size() - n);
+    for (std::vector<ContBancar>::size_type index=startIndex; index < listaConturi.size(); index++) {
         std::cout << listaConturi[index] << std::endl;
     }
 }
