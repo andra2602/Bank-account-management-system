@@ -16,7 +16,6 @@ void readAndDisplayObjects(int n,std::vector<ContBancar> &listaConturi) {
     std::cin >> name;
     int i = 0;
     while(i<n) {
-        float balance;
         std::string accountNum;
         std::string accountType;
         std::string password;
@@ -45,6 +44,7 @@ void readAndDisplayObjects(int n,std::vector<ContBancar> &listaConturi) {
             std::cout << "\tIntroduceti tipul de cont pe care il doriti (personal sau economii): ";
             std::cin >> accountType;
             std::cout << "\tSuma initiala a contului: ";
+            float balance;
             std::cin >> balance;
             std::cout << "\tIntroduceti parola: ";
             std::cin >> password;
@@ -109,9 +109,8 @@ int main() {
                 std::cout << std:: endl;
                 std::cout << "Introduceti parola: ";
                 std::cin >> parola;
-
-                bool ok =false;
                 try{
+                    bool ok =false;
                     for (const auto & i : listaConturi) {
                         if (i.getTitularCont() == numeUtilizator && i.getparola() == parola && i.getnumarCont()== numarCont) {
                             clientActual = i;
