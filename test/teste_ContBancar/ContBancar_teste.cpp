@@ -3,7 +3,7 @@
 
 
 TEST(ContBancarTestSuite, TestConstructoriSiGetteri) {
-    ContBancar cont("John Doe", "123456123456123456123456", 1000.0f, "economii", "parola123");
+    ContBancar cont("John Doe", "123456123456123456123456", 1000.0f, "economii", "parola1234");
 
     EXPECT_EQ(cont.getTitularCont(), "John Doe");
     EXPECT_EQ(cont.getnumarCont(), "123456123456123456123456");

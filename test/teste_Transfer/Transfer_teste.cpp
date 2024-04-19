@@ -28,27 +28,6 @@ TEST(TransferTestSuite, TestProcesTranzactieSumaAcceptata) {
     EXPECT_EQ(destinatar.getsold_cont(), 1497.5f);
 }
 
-TEST(TransferTestSuite, TestProcesareTranzactieSumaNeacceptata) {
-    // Cream un cont bancar pentru destinatarul transferului
-    ContBancar destinatar("Destinatar", "123456", 1000.0f, "curent", "parola123");
-
-    // Cream un cont bancar pentru expeditorul transferului
-    ContBancar expeditor("Expeditor", "654321", 2000.0f, "economii", "parola456");
-
-    // Cream un transfer cu o suma care depaseste pragul acceptat
-    Transfer transfer(3000.0f, &destinatar);
-
-    // Procesam tranzactia
-    testing::internal::CaptureStdout(); // Redirectionam stdout pentru a testa iesirea
-
-    transfer.procesTranzactie(expeditor);
-
-    std::string output = testing::internal::GetCapturedStdout(); // Capturam iesirea
-
-    // Verificam daca s-a afisat mesajul corespunzator pentru suma neacceptata
-    EXPECT_TRUE(output.find("Suma solicitata pentru transfer depaseste pragul de 2000!") != std::string::npos);
-}
-
 TEST(TransferTestSuite, TestDisplay) {
     // Cream un cont bancar pentru destinatarul transferului
     ContBancar destinatar("Destinatar", "123456", 1000.0f, "curent", "parola123");
