@@ -75,6 +75,26 @@ TEST(TransferTestSuite, TestObtineTipTranzactie) {
     EXPECT_EQ(transfer.obtineTipTranzactie(), "Transfer");
 }
 
+#include <stdexcept>
+
+TEST(TransferTest, SumaNeconforma) {
+    ContBancar expeditor("Expeditor", "789123", 2000.0f, "curent", "parola789");
+
+    // Cream un cont bancar pentru destinatarul transferului cu un sold de 1000
+    ContBancar destinatar("Destinatar", "123456", 1000.0f, "curent", "parola123");
+
+    // Transferăm o sumă mai mare decât pragul maxim permis
+    Transfer transfer(2500.0f, &destinatar);
+
+    // Verificăm că funcția aruncă excepția corespunzătoare
+    EXPECT_THROW(transfer.procesTranzactie(expeditor), ExceptieTranz);
+
+    // Verificăm că nu s-a modificat soldul contului inițial
+    EXPECT_FLOAT_EQ(expeditor.getsold_cont(), 2000.0);
+
+    // Verificăm că nu s-a modificat soldul contului destinatar
+    EXPECT_FLOAT_EQ(destinatar.getsold_cont(), 1000.0);
+}
 
 
 
