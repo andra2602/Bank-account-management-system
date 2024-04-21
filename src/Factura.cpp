@@ -24,10 +24,6 @@ void PlatesteFactura::procesTranzactie(ContBancar& contBancar) {
     }
 }
 
-bool PlatesteFactura::esteFacturaPlatita() const {
-    return facturaPlatita;
-}
-
 void PlatesteFactura::display(std::ostream &out) const {
     Tranzactie::display(out);
     out << "Numar factura: " << numarFactura << std::endl;
