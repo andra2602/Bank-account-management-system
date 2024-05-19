@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-#include "ContBancar.h"
+#include "./include/ContBancar.h"
 #include "Tranzactie.h"
 #include "Depunere.h"
 #include "Exceptii.h"
