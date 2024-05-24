@@ -7,12 +7,6 @@ template<typename Numar, typename Suma>
 Factura<Numar, Suma>::Factura(const Factura& altaFactura) : numarFactura(altaFactura.numarFactura), sumaPlata(altaFactura.sumaPlata), platita(altaFactura.platita), comision(altaFactura.comision) {}
 
 template<typename Numar, typename Suma>
-Numar Factura<Numar, Suma>::getNumarFactura() const { return numarFactura; }
-
-template<typename Numar, typename Suma>
-Suma Factura<Numar, Suma>::getSumaPlata() const { return sumaPlata; }
-
-template<typename Numar, typename Suma>
 bool Factura<Numar, Suma>::estePlatita() const { return platita; }
 
 template<typename Numar, typename Suma>

@@ -17,8 +17,6 @@ protected:
 public:
     Factura(Numar numar, Suma suma);
     Factura(const Factura& altaFactura);
-    Numar getNumarFactura() const;
-    Suma getSumaPlata() const;
     bool estePlatita() const;
 
     virtual std::string getType() const;

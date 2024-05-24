@@ -27,9 +27,6 @@ const char* EroareAutentificare::what() const noexcept {
     return this->message;
 }
 
-void aruncaEroareAutentificare(const char* errorMessage) {
-    throw EroareAutentificare(errorMessage);
-}
 //
 // Created by Andra on 4/19/2024.
 //
