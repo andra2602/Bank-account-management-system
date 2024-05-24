@@ -1,46 +1,30 @@
 #include "Factura.h"
 
-PlatesteFactura::PlatesteFactura(std::string tip, float s, std::string numar, float suma)
-        : Tranzactie(std::move(tip), s), numarFactura(std::move(numar)), sumaFactura(suma), facturaPlatita(false) {}
+template<typename Numar, typename Suma>
+Factura<Numar, Suma>::Factura(Numar numar, Suma suma) : numarFactura(numar), sumaPlata(suma), platita(false), comision(5) {}
 
-void PlatesteFactura::procesTranzactie(ContBancar& contBancar) {
-    if (!facturaPlatita) {
-        sumaFactura = getSuma();
-        if (contBancar.getsold_cont() >= sumaFactura) {
-            if (sumaFactura > 500) {
-                Tranzactie::setComision(5.0f);
-            } else {
-                Tranzactie::setComision(0.5f);
-            }
-            contBancar.setSold(contBancar.getsold_cont() - (sumaFactura + Tranzactie::comision));
-            std::cout << "Factura " << numarFactura << " in valoare de " << sumaFactura << " a fost platita." << std::endl;
-            std::cout << "Soldul curent al contului: " << contBancar.getsold_cont() << std::endl;
-            facturaPlatita = true;
-        } else {
-            std::cout << "Fonduri insuficiente pentru plata facturii." << std::endl;
-        }
-    } else {
-        std::cout << "Factura " << numarFactura << " a fost deja platita anterior." << std::endl;
-    }
-}
+template<typename Numar, typename Suma>
+Factura<Numar, Suma>::Factura(const Factura& altaFactura) : numarFactura(altaFactura.numarFactura), sumaPlata(altaFactura.sumaPlata), platita(altaFactura.platita), comision(altaFactura.comision) {}
 
-bool PlatesteFactura::esteFacturaPlatita() const {
-    return facturaPlatita;
-}
+template<typename Numar, typename Suma>
+Numar Factura<Numar, Suma>::getNumarFactura() const { return numarFactura; }
 
-void PlatesteFactura::display(std::ostream &out) const {
-    Tranzactie::display(out);
-    out << "Numar factura: " << numarFactura << std::endl;
-    out << "Suma factura: " << sumaFactura << std::endl;
-    out << "Factura platita: " << (facturaPlatita ? "Da" : "Nu") << std::endl;
-}
+template<typename Numar, typename Suma>
+Suma Factura<Numar, Suma>::getSumaPlata() const { return sumaPlata; }
 
-void PlatesteFactura::read(std::istream &in) {
-    Tranzactie::read(in);
-    in >> numarFactura;
-    in >> sumaFactura;
-    facturaPlatita = false;
+template<typename Numar, typename Suma>
+bool Factura<Numar, Suma>::estePlatita() const { return platita; }
+
+template<typename Numar, typename Suma>
+void Factura<Numar, Suma>::afisareDetalii() const {
+    std::cout << "Numar factura: " << numarFactura << std::endl;
+    std::cout << "Suma plata: " << sumaPlata << std::endl;
 }
-//
-// Created by Andra on 4/21/2024.
-//
+template<typename Numar, typename Suma>
+std::string Factura<Numar, Suma>::getType() const {
+    return "Factura";
+}
+template<typename Numar, typename Suma>
+Factura<Numar, Suma>::~Factura() = default;
+
+template class Factura<int,float>;

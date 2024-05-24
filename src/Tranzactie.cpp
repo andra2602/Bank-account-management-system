@@ -34,6 +34,9 @@ std::istream& operator>>(std::istream &in, Tranzactie &tranzactie) {
     tranzactie.read(in);
     return in;
 }
+bool Tranzactie::operator<(const Tranzactie& other) const {
+    return suma < other.suma;
+}
 
 [[maybe_unused]] float Tranzactie::comision = 0.005f;
 

@@ -1,13 +1,19 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <list>
+#include <map>
+#include <algorithm>
 
-#include "./include/ContBancar.h"
+#include "ContBancar.h"
 #include "Tranzactie.h"
 #include "Depunere.h"
 #include "Exceptii.h"
 #include "Retragere.h"
 #include "Transfer.h"
+#include "Factura.h"
+#include "FacturaUtilitati.h"
+#include "DepunereBuilder.h"
 
 
 void readAndDisplayObjects(int n,std::vector<ContBancar> &listaConturi) {
@@ -61,217 +67,295 @@ void readAndDisplayObjects(int n,std::vector<ContBancar> &listaConturi) {
         std::cout << listaConturi[index] << std::endl;
     }
 }
-int main() {
-    int optiune;
-    ContBancar clientActual;
-    ContBancar clientDestinatar;
-    std::vector<ContBancar> listaConturi;
-    listaConturi.emplace_back("Ionescu", "123456789123456789123456",600,"personal","Ionescu1234");
-    listaConturi.emplace_back("Cirstea", "A2b9C4d7E1f8G3h6I5j2K9l4",5000,"personal","Cirstea1234");
-    listaConturi.emplace_back("Popescu", "xqnwhG2Yq5zfg4JDPbGkG9VR",1000,"personal","Popescu1234");
-    listaConturi.emplace_back("Dobrinoiu", "K6RAvQwfDsjUvNZASc88u3zF",10235,"economii","Dobrinoiu1234");
-    listaConturi.emplace_back("Iordache", "7UmHecHqYkRuB48xeKvgg8qT",5,"personal","Iordache1234");
-    listaConturi.emplace_back("Miinescu", "bVj7Ka4zh7d9GhdtgrfLhjh6",58,"personal","Miinescu1234");
-    listaConturi.emplace_back("Paun", "HMFbQdhEQRNyfcRFaRsMUwVL",123,"personal","Paun1234");
-    listaConturi.emplace_back("Calina", "Q6J8LSKjK3uUyBq8JxJegZL9",3,"personal","Calina1234");
-    listaConturi.emplace_back("Bica", "668w2dSYdsfm45uFfdvZvueV",1200,"personal","Bica1234");
-    listaConturi.emplace_back("Stefan", "rrmdrP7KrH67ZLLZPrxcdpqs",55000,"economii","Stefan1234");
+auto comparatorTranzactii = [](const Tranzactie* tranzactie1, const Tranzactie* tranzactie2) {
+    // Compararea tranzacțiilor după suma lor
+    return tranzactie1->getSuma() < tranzactie2->getSuma();
+};
+class Meniu {
+public:
+    // Method to get the singleton instance
+    static Meniu& getInstance() {
+        static Meniu instance; // Guaranteed to be destroyed and instantiated on first use
+        return instance;
+    }
 
-    std::cout << "Meniu:" << std::endl;
-    do {
-        std::cout << "1. Creaza cont nou" << std::endl;
-        std::cout << "2. Login" << std::endl;
-        std::cout << "3. Iesire" << std::endl;
-        std::cout << "Alege o optiune: " <<std::endl;
-        std::cout << "Daca nu aveti deja cont,va rugam sa selectati 1!"<< std::endl;
-        std::cout << "Altfel,apasati 2!"<<std::endl;
-        std::cin >> optiune;
-        switch (optiune) {
-            case 1:
-            {
-                int n;
-                std::cout<<"Cate conturi doriti sa va creati?"<<std::endl;
-                std::cin>>n;
-                if(n>0){
-                    readAndDisplayObjects(n,listaConturi);
-                }
-                break;
+    // Delete copy constructor and assignment operator to prevent copying
+    Meniu(Meniu const&) = delete;
+    void operator=(Meniu const&) = delete;
+
+    // Main method to display the menu and handle user input
+    void run() {
+        int optiune;
+        std::vector<ContBancar> listaConturi = createInitialAccounts();
+        ContBancar clientActual;
+
+        std::cout << "Meniu:" << std::endl;
+        do {
+            std::cout << "1. Creaza cont nou" << std::endl;
+            std::cout << "2. Login" << std::endl;
+            std::cout << "3. Iesire" << std::endl;
+            std::cout << "Alege o optiune: " << std::endl;
+            std::cout << "Daca nu aveti deja cont,va rugam sa selectati 1!" << std::endl;
+            std::cout << "Altfel,apasati 2!" << std::endl;
+            std::cin >> optiune;
+            switch (optiune) {
+                case 1:
+                    handleCreateAccount(listaConturi);
+                    break;
+                case 2:
+                    handleLogin(listaConturi, clientActual);
+                    break;
+                case 3:
+                    std::cout << "Iesire din aplicatie!" << std::endl;
+                    break;
+                default:
+                    std::cout << "Optiune invalida. Te rog sa alegi o optiune valida." << std::endl;
             }
-            case 2:
-            {
-                std::string numeUtilizator, parola, numarCont;
-                std::vector<Tranzactie*> tranzactii;
-                std::cout << "Introduceti numele de utilizator: ";
-                std::cin >> numeUtilizator;
-                std::cout << std:: endl;
-                std::cout << "Introduceti numarul contului dumneavoastra: ";
-                std::cin >> numarCont;
-                std::cout << std:: endl;
-                std::cout << "Introduceti parola: ";
-                std::cin >> parola;
-                try{
-                    bool ok =false;
-                    for (const auto & i : listaConturi) {
-                        if (i.getTitularCont() == numeUtilizator && i.getparola() == parola && i.getnumarCont()== numarCont) {
-                            clientActual = i;
-                            std::cout << "Autentificare reusita. Bine ai venit, " << numeUtilizator << "!" << std::endl;
-                            ok =true;
-                            break;
-                        }
-                    }
+        } while (optiune != 3);
+    }
 
-                    if (ok == 0) {
-                        aruncaEroareAutentificare("Autentificare esuata. Datele de conectare au fost introduse incorect.");
-                    }
-                }catch (const Exceptie &ex) {
-                    if (const auto *autentificareEx = dynamic_cast<const EroareAutentificare *>(&ex)) {
-                        std::cout << "Eroare la autentificare: " << autentificareEx->what() << std::endl;
-                    } else {
-                        // Tratează alte tipuri de excepții Eroare
-                        std::cout << "Eroare generica: " << ex.what() << std::endl;
-                    }
+private:
+    // Private constructor to prevent instantiation
+    Meniu() {}
+
+    // Method to create initial accounts
+    std::vector<ContBancar> createInitialAccounts() {
+        std::vector<ContBancar> listaConturi;
+        listaConturi.emplace_back("Ionescu", "123456789123456789123456", 600, "personal", "Ionescu1234");
+        listaConturi.emplace_back("Cirstea", "A2b9C4d7E1f8G3h6I5j2K9l4", 5000, "personal", "Cirstea1234");
+        listaConturi.emplace_back("Popescu", "xqnwhG2Yq5zfg4JDPbGkG9VR", 1000, "personal", "Popescu1234");
+        listaConturi.emplace_back("Dobrinoiu", "K6RAvQwfDsjUvNZASc88u3zF", 10235, "economii", "Dobrinoiu1234");
+        listaConturi.emplace_back("Iordache", "7UmHecHqYkRuB48xeKvgg8qT", 5, "personal", "Iordache1234");
+        listaConturi.emplace_back("Miinescu", "bVj7Ka4zh7d9GhdtgrfLhjh6", 58, "personal", "Miinescu1234");
+        listaConturi.emplace_back("Paun", "HMFbQdhEQRNyfcRFaRsMUwVL", 123, "personal", "Paun1234");
+        listaConturi.emplace_back("Calina", "Q6J8LSKjK3uUyBq8JxJegZL9", 3, "personal", "Calina1234");
+        listaConturi.emplace_back("Bica", "668w2dSYdsfm45uFfdvZvueV", 1200, "personal", "Bica1234");
+        listaConturi.emplace_back("Stefan", "rrmdrP7KrH67ZLLZPrxcdpqs", 55000, "economii", "Stefan1234");
+        return listaConturi;
+    }
+
+    // Method to handle account creation
+    void handleCreateAccount(std::vector<ContBancar>& listaConturi) {
+        int n;
+        std::cout << "Cate conturi doriti sa va creati?" << std::endl;
+        std::cin >> n;
+        readAndDisplayObjects(n, listaConturi);
+    }
+
+    // Method to handle login
+    void handleLogin(std::vector<ContBancar>& listaConturi, ContBancar& clientActual) {
+        std::string numeUtilizator, parola, numarCont;
+        std::list<Tranzactie*> tranzactii;
+        std::map<int, Factura<int, float>*> facturiPlatite;
+        std::cout << "Introduceti numele de utilizator: ";
+        std::cin >> numeUtilizator;
+        std::cout << std::endl;
+        std::cout << "Introduceti numarul contului dumneavoastra: ";
+        std::cin >> numarCont;
+        std::cout << std::endl;
+        std::cout << "Introduceti parola: ";
+        std::cin >> parola;
+
+        bool ok = false;
+        try {
+            for (const auto& i : listaConturi) {
+                if (i.getTitularCont() == numeUtilizator && i.getparola() == parola && i.getnumarCont() == numarCont) {
+                    clientActual = i;
+                    std::cout << "Autentificare reusita. Bine ai venit, " << numeUtilizator << "!" << std::endl;
+                    ok = true;
                     break;
                 }
-
-                int suboptiune;
-                do {
-                    std::cout << "\nMeniu cont curent:" << std::endl;
-                    std::cout << "1. Vizualizeaza contul meu" << std::endl;
-                    std::cout << "2. Realizeaza tranzactii" << std::endl;
-                    std::cout << "3. Interogare sold" << std::endl;
-                    std::cout << "4. Vizualizeaza ultimele tranzactii" << std::endl;
-                    std::cout << "5. Delogare" << std::endl;
-                    std::cout << "Alege o optiune: ";
-                    std::cin >> suboptiune;
-
-                    switch (suboptiune) {
-                        case 1: {
-                            std::cout << "Informatii despre cont-ul autentificat in acest moment:" << std::endl;
-                            std::cout << clientActual;
-                            break;
-                        }
-                        case 2: {
-                            std::string op_tranz;
-                            float suma;
-                            std::cout << "Ce tip de tranzactie doriti sa realizati?" << std::endl;
-                            std::cout << "Ca si optiuni de tranzactii aveti: depunere, retragere, transfer."
-                                      << std::endl;
-                            std::cin >> op_tranz;
-                            std::cout << "Introduceti suma dorita: " << std::endl;
-                            std::cin >> suma;
-                            if (op_tranz != "depunere" && op_tranz != "retragere" && op_tranz != "transfer") {
-                                std::cout
-                                        << "Tipul de tranzactie selectat este necunoscut.\n Va rugam sa reluati procesul cu unul din tipurile de tranzactii specificat."
-                                        << std::endl;
-                                break;
-                            } else {
-                                Tranzactie *tranzactie = nullptr;
-                                try {
-                                    if (op_tranz == "depunere") {
-                                        tranzactie = new Depunere(suma);
-                                    } else if (op_tranz == "retragere") {
-                                        tranzactie = new Retragere(suma);
-                                    } else if (op_tranz == "transfer") {
-                                        std::string numeClientDestinatar, numarContDestinatar;
-                                        std::cout
-                                                << "Introduceti numele titularului contului catre care vreti sa se execute transferul:"
-                                                << std::endl;
-                                        std::cin >> numeClientDestinatar;
-                                        std::cout
-                                                << "Introduceti numarul contului catre care vreti sa se execute transferul:"
-                                                << std::endl;
-                                        std::cin >> numarContDestinatar;
-
-                                        // Caută contul destinatar în listaConturi
-                                        ContBancar *destinatar = nullptr;
-                                        for (auto &cont: listaConturi) {
-                                            if (cont.getnumarCont() == numarContDestinatar &&
-                                                cont.getTitularCont() == numeClientDestinatar) {
-                                                destinatar = &cont;
-                                                break;
-                                            }
-                                        }
-                                        if (destinatar == nullptr) {
-                                            std::cout
-                                                    << "Contul destinatar nu a fost gasit. Transferul nu poate fi efectuat."
-                                                    << std::endl;
-                                            break;
-                                        }
-                                        // Dacă contul destinatar a fost găsit, efectuează transferul
-                                        tranzactie = new Transfer(suma, destinatar);
-                                    }
-                                    if(tranzactie != nullptr)
-                                    {
-                                        tranzactie->procesTranzactie(clientActual);
-                                        tranzactii.push_back(tranzactie);
-                                    }
-                                } catch (const Exceptie &ex) {
-                                    // Aici prindem excepția folosind tipul de bază (upcast)
-                                    std::cout << "!!! Eroare la efectuarea tranzactiei !!!"<<std::endl;
-                                    const auto *exTranz = dynamic_cast<const ExceptieTranz *>(&ex);
-                                    if(exTranz){
-                                        std::cout<<"Motiv: "<<exTranz->what()<<std::endl;
-                                    }
-                                    else{
-                                        std::cout << "Eroarea nu este de tipul ExceptieTranz." << std::endl;
-                                    }
-                                    /*std::cout << "Tranzactia nu poate fi efectuata!" << std::endl << "Motiv: "
-                                              << ex.what() << std::endl;*/
-                                }
-
-                            }
-                            break;
-                        }
-                        case 3:
-                            std::cout << "Soldul contului dumneavoastra este: " << clientActual.getsold_cont()
-                                      << std::endl;
-                            break;
-                        case 4: {
-                            if (tranzactii.empty())
-                                std::cout << "Inca nu ati efectuat tranzactii." << std::endl;
-                            else {
-                                std::cout << "Ultimele tranzactii:" << std::endl;
-                                for (auto &tranzactie: tranzactii) {
-                                    if (auto *depunere = dynamic_cast<Depunere *>(tranzactie)) {
-                                        std::cout << "Tranzactie de " << depunere->obtineTipTranzactie()
-                                                  << " efectuata." << std::endl;
-                                        depunere->afisareDetalii();
-                                    } else if (auto *retragere = dynamic_cast<Retragere *>(tranzactie)) {
-                                        std::cout << "Tranzactie de " << retragere->obtineTipTranzactie()
-                                                  << " efectuata." << std::endl;
-                                        retragere->afisareDetalii();
-                                    } else if (auto *transfer = dynamic_cast<Transfer *>(tranzactie)) {
-                                        std::cout << "Tranzactie de " << transfer->obtineTipTranzactie()
-                                                  << " efectuata." << std::endl;
-                                        transfer->afisareDetalii();
-                                    }
-                                }
-                            }
-                            break;
-                        }
-                        case 5: {
-                            std::cout << "Delogare realizata cu succes!" << std::endl;
-                            std::cout << "O zi frumoasa!" << std::endl;
-                            for (auto *tranzactie: tranzactii) {
-                                delete tranzactie;
-                            }
-                            std::cout << std::endl;
-                            std::cout << std::endl;
-                            break;
-                        }
-
-                        default:
-                            std::cout << "Optiune invalida. Te rog sa alegi o optiune valida." << std::endl;
-                    }
-                } while (suboptiune != 5);
-                break;
             }
-            case 3:
-            {std::cout<<"Iesire din aplicatie!"<<std::endl;
-                break;}
-            default:
-                std::cout << "Optiune invalida. Te rog sa alegi o optiune valida." << std::endl;
+
+            if (!ok) {
+                throw EroareAutentificare("Autentificare esuata. Nume de utilizator sau parola incorecte.");
+            }
+        } catch (const Exceptie& ex) {
+            if (const auto* autentificareEx = dynamic_cast<const EroareAutentificare*>(&ex)) {
+                std::cout << "Eroare la autentificare: " << autentificareEx->what() << std::endl;
+            } else {
+                // Tratează alte tipuri de excepții Eroare
+                std::cout << "Eroare generica: " << ex.what() << std::endl;
+            }
+            return;
         }
-    } while (optiune != 3);
+
+        int suboptiune;
+        do {
+            std::cout << "\nMeniu cont curent:" << std::endl;
+            std::cout << "1. Vizualizeaza contul meu" << std::endl;
+            std::cout << "2. Realizeaza tranzactii" << std::endl;
+            std::cout << "3. Interogare sold" << std::endl;
+            std::cout << "4. Vizualizeaza ultimele tranzactii si plati" << std::endl;
+            std::cout << "5. Plateste factura utilitati" << std::endl;
+            std::cout << "6. Delogare" << std::endl;
+            std::cout << "Alege o optiune: ";
+            std::cin >> suboptiune;
+
+            switch (suboptiune) {
+                case 1:
+                    std::cout << "Informatii despre cont-ul autentificat in acest moment:" << std::endl;
+                    std::cout << clientActual;
+                    break;
+                case 2:
+                    handleTransaction(clientActual, tranzactii, listaConturi);
+                    break;
+                case 3:
+                    std::cout << "Soldul contului dumneavoastra este: " << clientActual.getsold_cont() << std::endl;
+                    break;
+                case 4:
+                    viewTransactions(tranzactii, facturiPlatite);
+                    break;
+                case 5:
+                    payUtilityBill(clientActual, facturiPlatite);
+                    break;
+                case 6:
+                    logout(tranzactii);
+                    std::cout << "Delogare realizata cu succes!" << std::endl;
+                    std::cout << "O zi frumoasa!" << std::endl;
+                    break;
+                default:
+                    std::cout << "Optiune invalida. Te rog sa alegi o optiune valida." << std::endl;
+            }
+        } while (suboptiune != 6);
+    }
+
+    // Methods to handle various submenu options
+    void handleTransaction(ContBancar& clientActual, std::list<Tranzactie*>& tranzactii, std::vector<ContBancar>& listaConturi) {
+        std::string op_tranz;
+        float suma;
+        std::cout << "Ce tip de tranzactie doriti sa realizati?" << std::endl;
+        std::cout << "Ca si optiuni de tranzactii aveti: depunere, retragere, transfer." << std::endl;
+        std::cin >> op_tranz;
+        std::cout << "Introduceti suma dorita: " << std::endl;
+        std::cin >> suma;
+
+        if (op_tranz != "depunere" && op_tranz != "retragere" && op_tranz != "transfer") {
+            std::cout << "Tipul de tranzactie selectat este necunoscut.\n Va rugam sa reluati procesul cu unul din tipurile de tranzactii specificat." << std::endl;
+            return;
+        }
+
+        Tranzactie* tranzactie = nullptr;
+        try {
+            if (op_tranz == "depunere") {
+                DepunereBuilder builder;
+                tranzactie = new Depunere(builder.setSuma(suma).build());
+            } else if (op_tranz == "retragere") {
+                tranzactie = new Retragere(suma);
+            } else if (op_tranz == "transfer") {
+                std::string numeClientDestinatar, numarContDestinatar;
+                std::cout << "Introduceti numele titularului contului catre care vreti sa se execute transferul:" << std::endl;
+                std::cin >> numeClientDestinatar;
+                std::cout << "Introduceti numarul contului catre care vreti sa se execute transferul:" << std::endl;
+                std::cin >> numarContDestinatar;
+
+                // Caută contul destinatar în listaConturi
+                bool found = false;
+                ContBancar* destinatar = nullptr;
+                for (auto& cont : listaConturi) {
+                    if (cont.getnumarCont() == numarContDestinatar && cont.getTitularCont() == numeClientDestinatar) {
+                        destinatar = &cont;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    std::cout << "Contul destinatar nu a fost gasit. Transferul nu poate fi efectuat." << std::endl;
+                    return;
+                }
+                // Dacă contul destinatar a fost găsit, efectuează transferul
+                tranzactie = new Transfer(suma, destinatar);
+            }
+
+            tranzactie->procesTranzactie(clientActual);
+            tranzactii.push_back(tranzactie);
+        } catch (const ExceptieTranz& ex) {
+            std::cout << "Tranzactia nu poate fi efectuata!" << std::endl << "Motiv: " << ex.what() << std::endl;
+            delete tranzactie;
+        }
+    }
+
+
+    void viewTransactions(const std::list<Tranzactie*>& tranzactii, const std::map<int, Factura<int, float>*>& facturiPlatite) {
+        std::cout << "Ultimele tranzactii si facturi platite:" << std::endl;
+        std::cout << std::endl;
+        if (tranzactii.empty()) {
+            std::cout << "Inca nu ati efectuat tranzactii." << std::endl;
+        } else {
+            std::list<Tranzactie*> tranzactiiSortate = tranzactii; // Creează o copie a listei pentru a nu modifica lista originală
+            tranzactiiSortate.sort(comparatorTranzactii); // Sorteaza tranzactiile folosind comparatorul definit
+            std::cout << "Ultimele tranzactii:" << std::endl;
+            std::cout << std::endl;
+            for (const auto& tranzactie : tranzactiiSortate) {
+                if (auto* depunere = dynamic_cast<Depunere*>(tranzactie)) {
+                    std::cout << "Tranzactie de " << depunere->obtineTipTranzactie() << " efectuata." << std::endl;
+                    depunere->afisareDetalii();
+                } else if (auto* retragere = dynamic_cast<Retragere*>(tranzactie)) {
+                    std::cout << "Tranzactie de " << retragere->obtineTipTranzactie() << " efectuata." << std::endl;
+                    retragere->afisareDetalii();
+                } else if (auto* transfer = dynamic_cast<Transfer*>(tranzactie)) {
+                    std::cout << "Tranzactie de " << transfer->obtineTipTranzactie() << " efectuata." << std::endl;
+                    transfer->afisareDetalii();
+                }
+            }
+        }
+        if (facturiPlatite.empty()) {
+            std::cout << "Inca nu ati efectuat plati ale facturilor." << std::endl;
+        } else {
+            std::cout << "Ultimele facturi platite:" << std::endl;
+            std::cout << std::endl;
+            for (const auto& pair : facturiPlatite) {
+                int numarFactura = pair.first;
+                Factura<int, float>* factura = pair.second;
+                std::cout << "Detalii factura:" << std::endl;
+                factura->afisareDetalii();
+                std::cout << std::endl;
+            }
+        }
+    }
+
+    void payUtilityBill(ContBancar& clientActual, std::map<int, Factura<int, float>*>& facturiPlatite) {
+        std::string tipUtilitate;
+        float suma;
+        int numarFactura;
+        std::list<std::string> tipuriUtilitati = {"gaz", "apa", "curent", "telefon"};
+        std::cout << "Introduceti tipul de utilitate: ";
+        std::cin >> tipUtilitate;
+        std::cout << "Introduceti valoarea facturii: ";
+        std::cin >> suma;
+        std::cout << "Introduceti numarul facturii: ";
+        std::cin >> numarFactura;
+
+        if (std::find(tipuriUtilitati.begin(), tipuriUtilitati.end(), tipUtilitate) != tipuriUtilitati.end()) {
+            /// Creează o instanță a clasei FacturaUtilitati
+            Factura<int, float>* factura = new FacturaUtilitati<int, float>(numarFactura, suma, tipUtilitate);
+            factura->platesteFactura(clientActual);
+
+            /// Verificare dacă factura a fost plătită, dacă da, adăugăm factura în map-ul facturiPlatite
+            if (factura->estePlatita()) {
+                facturiPlatite[numarFactura] = factura;
+                if (auto facturaUtilitati = dynamic_cast<FacturaUtilitati<int, float>*>(factura)) {
+                    std::cout << "Factura este de tipul: " << facturaUtilitati->getType() << std::endl;
+                    std::cout << "Tipul de utilitate: " << facturaUtilitati->getTipUtilitate() << std::endl;
+                }
+            } else {
+                /// Dacă factura nu a fost plătită, eliberăm memoria alocată pentru factură
+                delete factura;
+            }
+        } else {
+            std::cout << "Nu se poate plati aceasta factura la noi. Tipul de utilitate nu este acceptat." << std::endl;
+            std::cout << "Singurele tipuri de utilitate acceptate de noi: gaz, apa, curent, telefon." << std::endl;
+        }
+    }
+
+    void logout(std::list<Tranzactie*>& tranzactii) {
+        for (auto* tranzactie : tranzactii) {
+            delete tranzactie;
+        }
+        tranzactii.clear();
+    }
+};
+int main() {
+    Meniu::getInstance().run();
     return 0;
 }

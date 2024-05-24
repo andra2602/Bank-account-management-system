@@ -22,7 +22,7 @@ public:
     Tranzactie& operator=(const Tranzactie &t);
     friend std::ostream& operator<<(std::ostream &out, const Tranzactie &tranzactie);
     friend std::istream& operator>>(std::istream &in, Tranzactie &tranzactie);
-
+    bool operator<(const Tranzactie& other) const;
     [[maybe_unused]] static float comision;
 
     [[maybe_unused]] static void setComision(float value);
