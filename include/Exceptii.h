@@ -36,5 +36,6 @@ public:
     [[nodiscard]] const char* what() const noexcept override;
 };
 
+void aruncaEroareAutentificare(const char* errorMessage);
 
 #endif //OOP_EXCEPTII_H
