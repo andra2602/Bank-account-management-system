@@ -156,18 +156,18 @@ private:
         std::cout << "Introduceti parola: ";
         std::cin >> parola;
 
-        bool ok = false;
         try {
+            bool autentificat = false;
             for (const auto& i : listaConturi) {
                 if (i.getTitularCont() == numeUtilizator && i.getparola() == parola && i.getnumarCont() == numarCont) {
                     clientActual = i;
                     std::cout << "Autentificare reusita. Bine ai venit, " << numeUtilizator << "!" << std::endl;
-                    ok = true;
+                    autentificat = true;
                     break;
                 }
             }
 
-            if (!ok) {
+            if (!autentificat) {
                 aruncaEroareAutentificare("Autentificare esuata. Nume de utilizator sau parola incorecte.");
             }
         } catch (const Exceptie& ex) {
@@ -179,6 +179,7 @@ private:
             }
             return;
         }
+
 
         int suboptiune;
         do {
