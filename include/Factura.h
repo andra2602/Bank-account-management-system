@@ -17,9 +17,9 @@ protected:
 public:
     Factura(Numar numar, Suma suma);
     Factura(const Factura& altaFactura);
-    bool estePlatita() const;
+    [[nodiscard]] bool estePlatita() const;
 
-    virtual std::string getType() const;
+    [[maybe_unused]] [[nodiscard]] virtual std::string getType() const;
     virtual void afisareDetalii() const;
     virtual void platesteFactura(ContBancar& contBancar) = 0;
     virtual ~Factura();

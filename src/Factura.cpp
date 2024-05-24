@@ -15,7 +15,7 @@ void Factura<Numar, Suma>::afisareDetalii() const {
     std::cout << "Suma plata: " << sumaPlata << std::endl;
 }
 template<typename Numar, typename Suma>
-std::string Factura<Numar, Suma>::getType() const {
+[[maybe_unused]] std::string Factura<Numar, Suma>::getType() const {
     return "Factura";
 }
 template<typename Numar, typename Suma>

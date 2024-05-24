@@ -251,7 +251,7 @@ private:
 
                 // Caută contul destinatar în listaConturi
                 bool found = false;
-                ContBancar* destinatar = nullptr;
+                ContBancar* destinatar;
                 for (auto& cont : listaConturi) {
                     if (cont.getnumarCont() == numarContDestinatar && cont.getTitularCont() == numeClientDestinatar) {
                         destinatar = &cont;
@@ -266,9 +266,10 @@ private:
                 // Dacă contul destinatar a fost găsit, efectuează transferul
                 tranzactie = new Transfer(suma, destinatar);
             }
-
-            tranzactie->procesTranzactie(clientActual);
-            tranzactii.push_back(tranzactie);
+            if(tranzactie != nullptr){
+                tranzactie->procesTranzactie(clientActual);
+                tranzactii.push_back(tranzactie);
+            }
         } catch (const ExceptieTranz& ex) {
             std::cout << "Tranzactia nu poate fi efectuata!" << std::endl << "Motiv: " << ex.what() << std::endl;
             delete tranzactie;
@@ -305,7 +306,7 @@ private:
             std::cout << "Ultimele facturi platite:" << std::endl;
             std::cout << std::endl;
             for (const auto& pair : facturiPlatite) {
-                int numarFactura = pair.first;
+                [[maybe_unused]] int numarFactura = pair.first;
                 Factura<int, float>* factura = pair.second;
                 std::cout << "Detalii factura:" << std::endl;
                 factura->afisareDetalii();
