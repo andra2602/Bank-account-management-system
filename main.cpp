@@ -168,7 +168,7 @@ private:
             }
 
             if (!ok) {
-                throw EroareAutentificare("Autentificare esuata. Nume de utilizator sau parola incorecte.");
+                aruncaEroareAutentificare("Autentificare esuata. Nume de utilizator sau parola incorecte.");
             }
         } catch (const Exceptie& ex) {
             if (const auto* autentificareEx = dynamic_cast<const EroareAutentificare*>(&ex)) {
@@ -220,7 +220,7 @@ private:
         } while (suboptiune != 6);
     }
 
-    // Methods to handle various submenu options
+    // functiile pentru submeniu
     void handleTransaction(ContBancar& clientActual, std::list<Tranzactie*>& tranzactii, std::vector<ContBancar>& listaConturi) {
         std::string op_tranz;
         float suma;
