@@ -12,23 +12,23 @@ private:
 public:
 
 
-    ContBancarBuilder& setTitular(std::string TitularCont){
+    ContBancarBuilder& setTitular(const std::string &TitularCont){
         this->cb.TitularCont = TitularCont;
         return *this;
     }
-    ContBancarBuilder& setNumarCont(std::string numarCont){
+    ContBancarBuilder& setNumarCont(const std::string &numarCont){
         this->cb.numarCont = numarCont;
         return *this;
     }
-    ContBancarBuilder& setSold(float sold_cont){
+    ContBancarBuilder& setSold(const float &sold_cont){
         this->cb.sold_cont = sold_cont;
         return *this;
     }
-    ContBancarBuilder& setTip(std::string tipCont){
+    ContBancarBuilder& setTip(const std::string &tipCont){
         this->cb.tipCont = tipCont;
         return *this;
     }
-    ContBancarBuilder& setParola(std::string parola){
+    ContBancarBuilder& setParola(const std::string &parola){
         this->cb.parola = parola;
         return *this;
     }
