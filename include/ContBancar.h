@@ -17,6 +17,7 @@ private:
     std::string parola;
 
 public:
+    friend class ContBancarBuilder;
     explicit ContBancar(std::string titular = "-", std::string numar = "000000000000000000000000", float sold = 0.0, std::string tip = "personal", std::string pass = "0000");
     ContBancar(std::string titular, std::string numar, float sold);
     ContBancar(const ContBancar &auxiliar);

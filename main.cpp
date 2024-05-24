@@ -13,7 +13,7 @@
 #include "Transfer.h"
 #include "Factura.h"
 #include "FacturaUtilitati.h"
-#include "DepunereBuilder.h"
+#include "ContBancarBuilder.h"
 
 
 void readAndDisplayObjects(int n,std::vector<ContBancar> &listaConturi) {
@@ -55,7 +55,9 @@ void readAndDisplayObjects(int n,std::vector<ContBancar> &listaConturi) {
             std::cout << "\tIntroduceti parola: ";
             std::cin >> password;
 
-            listaConturi.emplace_back(name,accountNum,balance,accountType,password);
+            ContBancarBuilder builder;
+            ContBancar cont = builder.setTitular(name).setNumarCont(accountNum).setSold(balance).setTip(accountType).setParola(password).build();
+            listaConturi.emplace_back(cont);
             std::cout << "\tCont creat cu succes." << std::endl;
             i++;
         }
@@ -239,8 +241,7 @@ private:
         Tranzactie* tranzactie = nullptr;
         try {
             if (op_tranz == "depunere") {
-                DepunereBuilder builder;
-                tranzactie = new Depunere(builder.setSuma(suma).build());
+                tranzactie = new Depunere(suma);
             } else if (op_tranz == "retragere") {
                 tranzactie = new Retragere(suma);
             } else if (op_tranz == "transfer") {
