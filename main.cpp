@@ -75,17 +75,15 @@ auto comparatorTranzactii = [](const Tranzactie* tranzactie1, const Tranzactie* 
 };
 class Meniu {
 public:
-    // Method to get the singleton instance
     static Meniu& getInstance() {
-        static Meniu instance; // Guaranteed to be destroyed and instantiated on first use
+        static Meniu instance;
         return instance;
     }
 
-    // Delete copy constructor and assignment operator to prevent copying
+    // Stergem constructorul si operatorul de copiere pentru a preveni copierea
     Meniu(Meniu const&) = delete;
     void operator=(Meniu const&) = delete;
 
-    // Main method to display the menu and handle user input
     void run() {
         int optiune;
         std::vector<ContBancar> listaConturi = createInitialAccounts();
@@ -117,10 +115,9 @@ public:
     }
 
 private:
-    // Private constructor to prevent instantiation
+
     Meniu() {}
 
-    // Method to create initial accounts
     std::vector<ContBancar> createInitialAccounts() {
         std::vector<ContBancar> listaConturi;
         listaConturi.emplace_back("Ionescu", "123456789123456789123456", 600, "personal", "Ionescu1234");
@@ -136,7 +133,7 @@ private:
         return listaConturi;
     }
 
-    // Method to handle account creation
+
     void handleCreateAccount(std::vector<ContBancar>& listaConturi) {
         int n;
         std::cout << "Cate conturi doriti sa va creati?" << std::endl;
@@ -144,7 +141,7 @@ private:
         readAndDisplayObjects(n, listaConturi);
     }
 
-    // Method to handle login
+
     void handleLogin(std::vector<ContBancar>& listaConturi, ContBancar& clientActual) {
         std::string numeUtilizator, parola, numarCont;
         std::list<Tranzactie*> tranzactii;
