@@ -1,3 +1,137 @@
+# **Banking Management System**  
+
+## **Description**  
+This project implements an **interactive console-based system** for managing **bank accounts**, allowing users to perform various financial operations. The system supports multiple types of accounts and transactions and is built using **advanced object-oriented programming (OOP) concepts**, **design patterns** such as **Singleton** and **Builder**, and a modular structure.
+
+The project adheres to mandatory requirements and leverages **inheritance, exceptions, abstract classes, operator overloading, and virtual functions**, providing a **complete and modular implementation**.  
+Key components include:
+- **Bank Account class**: Manages personal and savings accounts.
+- **Transaction class**: Handles deposits, withdrawals, and transfers.
+- **Invoice class**: Manages utility bills through the `InvoiceUtilities` subclass.
+
+### **Implemented Design Patterns**  
+- ✅ **Singleton** – Ensures a single instance for managing bank accounts.  
+- ✅ **Builder** – Constructs complex objects (e.g., bank accounts) in a **modular and clear** manner.  
+
+---
+
+## **Technologies Used**  
+- **Programming Language**: C++  
+- **Paradigm**: Object-Oriented Programming (OOP)  
+- **Testing**: Unit tests to validate implemented functionalities  
+
+---
+
+## **Main Features**  
+✔ **Bank Account Management** – Supports different account types (personal, savings).  
+✔ **Financial Transactions** – Deposits, withdrawals, and transfers between accounts.  
+✔ **Comprehensive Financial Operations** – Various banking operations.  
+✔ **Authentication & Security System** – Verifies user identity.  
+✔ **Monitoring & Auditing** – Logs all user actions.  
+✔ **Custom Exceptions** – Robust error handling.  
+✔ **Interactive Menu** – Easy console-based interaction.  
+
+---
+
+## **Project Objectives**  
+✔️ Develop a **robust system** for managing bank accounts and transactions.  
+
+✔️ Strengthen **OOP knowledge** gained during the course.  
+
+✔️ Implement **advanced features** using complex **OOP concepts**.  
+
+✔️ Ensure modularity and extensibility through **structured testing and validation**.  
+
+---
+
+## **Project Structure**  
+📂 **include/** – Header files (`.h`)  
+
+📂 **src/** – Class implementations (`.cpp`)  
+
+📂 **tests/** – Unit test files  
+
+📂 **data/** – Input/output files for testing  
+
+---
+
+## **Key Classes**  
+
+### **1. Bank Account Class**  
+**Attributes**:  
+- Account number  
+- Balance  
+- Account holder  
+- Account type  
+- Password  
+
+**Overloaded Operators**:  
+✅ `<<`, `>>`, `=`  
+
+---
+
+### **2. Transaction Class** (Base Class)  
+- **Derived Classes**: `Deposit`, `Withdrawal`, `Transfer`  
+- Manages deposit and withdrawal amounts, **fund verification**, and **account transfers**  
+
+---
+
+### **3. Invoice Class** (Base Class)  
+- `InvoiceUtilities` extends `Invoice` to manage **utility bills**  
+
+---
+
+## **Design Patterns**  
+- **Singleton** – Ensures a **single instance** for managing **bank accounts**, preventing multiple instances of the same class.  
+- **Builder** – Constructs **complex objects**, such as bank accounts and transactions, in a **flexible and modular** way.  
+
+---
+
+## **How to Run the Project**  
+
+### **1️⃣ Clone the repository**  
+```bash
+git clone https://github.com/username/banking-management.git  
+cd banking-management
+```
+
+### **2️⃣ Compile the project using g++**  
+```bash
+g++ -Wall -o banking src/*.cpp
+```
+
+### **3️⃣ Run the program**  
+```bash
+./banking
+```
+
+### **4️⃣ Run unit tests**  
+```bash
+./tests/test_banking
+```
+
+---
+
+## **Advanced Features**  
+🔹 **Inheritance & Polymorphism** – Upcasting & Downcasting  
+
+🔹 **Abstract Classes** – Defining a clear hierarchy  
+
+🔹 **Custom Exceptions** – Handling invalid transactions  
+
+🔹 **Design Patterns** – Singleton & Builder for a **robust and extensible system** 
+
+🔹 **Overloaded Operators** – `<<`, `>>`, `=` for efficient object handling  
+
+---
+
+## **Final Thoughts**  
+This project provides **a complete banking management system**, leveraging **OOP principles, robust design patterns, and a structured approach to security and transaction management**. The implementation follows **best practices**, ensuring **modularity, maintainability, and performance optimization**.  
+
+___
+
+
+
 # Banking Management System 
 ## Descriere
 Acest proiect implementează o consolă interactivă pentru gestionarea conturilor bancare, permițând utilizatorilor să efectueze diverse operațiuni financiare. Sistemul suportă mai multe tipuri de conturi și tranzacții și este construit utilizând concepte avansate de programare orientată pe obiecte (OOP), design patterns precum Singleton și Builder, și un sistem modular.
